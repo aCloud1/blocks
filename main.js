@@ -60,7 +60,7 @@ class Renderer {
 const game_window = new GameWindow();
 const renderer = new Renderer(game_window);
 const dead_blocks = [];
-let current_figure = new Figure(new Position(3, 5));
+let current_figure = new Figure(new Position(3, 0));
 let collision_detector = new CollisionDetector(game_window);
 
 
@@ -81,12 +81,14 @@ function game_update(dt) {
     // todo: if at least one block collides with something that is below it, the figure must be converted to `dead`
 
     // todo: check collisions only when the block moves
-    if(collision_detector.willFigureCollideWithGround(current_figure)) {
+    if(collision_detector.willFigureCollideWithGround(current_figure) ||
+        collision_detector.willFigureCollideDown(current_figure)
+    ) {
         current_figure.getBlocks.forEach(block => {
             dead_blocks.push(block);
         });
         collision_detector.setCells(current_figure.getBlocks, 2);
-        current_figure = new Figure(new Position(3, 3));
+        current_figure = new Figure(new Position(3, 0));
     }
 }
 
@@ -113,19 +115,25 @@ const loop = time => {
 
 function handleKeyPress(e) {
     if(e.code == "ArrowLeft") {
-        current_figure.goLeft();
+        if(!collision_detector.willFigureCollideLeft(current_figure)) {
+            current_figure.goLeft();
+        }
     }
 
     if(e.code == "ArrowRight") {
-        current_figure.goRight();
+        if(!collision_detector.willFigureCollideRight(current_figure)) {
+            current_figure.goRight();
+        }
     }
     
     if(e.code == "ArrowDown") {
-        current_figure.goDown();
+        if(!collision_detector.willFigureCollideDown(current_figure)) {
+            current_figure.goDown();
+        }
     }
 
     if(e.code == "ArrowUp") {
-        current_figure.goUp()
+        current_figure.goUp();
     }
 
     if(e.code == "Enter") {
