@@ -19,6 +19,13 @@ export default class CollisionDetector {
         this.cells[grid_position.y][grid_position.x] = value;
     }
 
+    setCells(blocks, value) {
+        for(let i = 0; i < blocks.length; i++) {
+            const pos = blocks[i].getPosition;
+            this.cells[pos.y][pos.x] = value;
+        }
+    }
+
     getCellPositionFromCoordinates(position) {
         return new Position(
             position.x / this.window.block_size,
@@ -26,13 +33,18 @@ export default class CollisionDetector {
         );
     }
 
-    willCollideWithGround(block) {
-        if(block.pos.y + 1 >= this.window.height_in_blocks) {
-            return true;
+    willBlockCollideWithGround(block) {
+        return (block.pos.y + 1 >= this.window.height_in_blocks);
+    }
+
+    willFigureCollideWithGround(figure) {
+        const blocks = figure.getBlocks;
+        for(let i = 0; i < blocks.length; i++) {
+            if(this.willBlockCollideWithGround(blocks[i])) {
+                return true;
+            }
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     willCollideLeft(block) {

@@ -13,28 +13,28 @@ export default class Figure {
         ];
     }
 
-    getBlocks() {
+    get getBlocks() {
         return this.blocks;
     }
 
-	goRight() {
+    goRight() {
 	this.blocks.forEach(b => b.goRight());
-	}
+    }
 
-	goLeft() {
-		this.blocks.forEach(b => b.goLeft());
-	}
+    goLeft() {
+	this.blocks.forEach(b => b.goLeft());
+    }
 
-	goUp() {
-		this.blocks.forEach(b => b.goUp());
-	}
+    goUp() {
+	this.blocks.forEach(b => b.goUp());
+    }
 
-	goDown() {
-		this.blocks.forEach(b => b.goDown());
-	}
+    goDown() {
+	this.blocks.forEach(b => b.goDown());
+    }
 
-	update(dt) {
-		this.blocks.forEach(b => b.update(dt));
-	}
+    update(dt) {
+	this.blocks.forEach(b => b.update(dt));
+    }
 
 }

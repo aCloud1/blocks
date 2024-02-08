@@ -20,7 +20,7 @@ class GameWindow {
         this.height = this.height_in_blocks * this.block_size;
     }
 
-    getBlockSize() {
+    get getBlockSize() {
         return this.block_size;
     }
 }
@@ -38,15 +38,15 @@ class Renderer {
     renderBlock(block, fill_style = "blue") {
         this.context.fillStyle = fill_style;
         this.context.fillRect(
-            block.pos.x * this.window.block_size,
-            block.pos.y * this.window.block_size,
-            this.window.getBlockSize(),
-            this.window.getBlockSize()
+            block.getPosition.x * this.window.block_size,
+            block.getPosition.y * this.window.block_size,
+            this.window.getBlockSize,
+            this.window.getBlockSize
         );
     }
 
     renderFigure(figure) {
-        figure.getBlocks().forEach(b => this.renderBlock(b, "green"));
+        figure.getBlocks.forEach(b => this.renderBlock(b, "green"));
     }
 
     renderText() {
@@ -60,11 +60,9 @@ class Renderer {
 const game_window = new GameWindow();
 const renderer = new Renderer(game_window);
 const dead_blocks = [];
-let current_block = new Block(new Position(game_window.width_in_blocks / 2, 0));
+let current_figure = new Figure(new Position(3, 5));
 let collision_detector = new CollisionDetector(game_window);
 
-
-let current_figure = new Figure(new Position(3, 5));
 
 window.onload = function() {
     canvas = document.getElementById("board");
@@ -78,20 +76,17 @@ window.onload = function() {
 function game_update(dt) {
     if(!debug_mode) {
         current_figure.update(dt);
-        current_block.update(dt, game_window.getBlockSize());
     }
 
     // todo: if at least one block collides with something that is below it, the figure must be converted to `dead`
 
     // todo: check collisions only when the block moves
-    if(
-        collision_detector.willCollideWithGround(current_block) ||
-            collision_detector.willCollideDown(current_block)
-    ) {
-        dead_blocks.push(current_block);
-        collision_detector.setCell(current_block.getPosition, 2);
-
-        current_block = new Block(new Position(game_window.width_in_blocks / 2, 0));
+    if(collision_detector.willFigureCollideWithGround(current_figure)) {
+        current_figure.getBlocks.forEach(block => {
+            dead_blocks.push(block);
+        });
+        collision_detector.setCells(current_figure.getBlocks, 2);
+        current_figure = new Figure(new Position(3, 3));
     }
 }
 
@@ -101,8 +96,6 @@ function game_render() {
     context.fillRect(0, 0, game_window.width, game_window.height);
 
     dead_blocks.forEach(block => renderer.renderBlock(block));
-
-    renderer.renderBlock(current_block);
     renderer.renderFigure(current_figure);
 }
 
@@ -121,26 +114,18 @@ const loop = time => {
 function handleKeyPress(e) {
     if(e.code == "ArrowLeft") {
         current_figure.goLeft();
-        if(!collision_detector.willCollideLeft(current_block)) {
-            current_block.goLeft();
-        }
     }
 
     if(e.code == "ArrowRight") {
         current_figure.goRight();
-        if(!collision_detector.willCollideRight(current_block)) {
-            current_block.goRight();
-        }
     }
     
     if(e.code == "ArrowDown") {
         current_figure.goDown();
-        current_block.goDown();
     }
 
     if(e.code == "ArrowUp") {
         current_figure.goUp()
-        current_block.goUp();
     }
 
     if(e.code == "Enter") {
