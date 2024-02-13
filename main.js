@@ -1,12 +1,11 @@
-import Block from "./Block.js"
-import Figure from "./Figure.js"
+import {FigureT, FigureS} from "./Figure.js"
 import Position from "./Position.js"
 import CollisionDetector from "./CollisionDetector.js"
 
-var canvas;
-var context;
+let canvas;
+let context;
 
-var debug_mode = false;
+let debug_mode = false;
 
 
 class GameWindow {
@@ -56,11 +55,31 @@ class Renderer {
     }
 }
 
+class Randomizer {
+    constructor() {
+    }
+
+    // `max` is non-inclusive
+    generateRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    createRandomFigureType(position) {
+        switch(this.generateRandomInt(0, 2)) {
+            case 0:
+                return new FigureS(position);
+            case 1:
+                return new FigureT(position);
+        }
+    }
+}
+
 
 const game_window = new GameWindow();
 const renderer = new Renderer(game_window);
+const randomizer = new Randomizer();
 const dead_blocks = [];
-let current_figure = new Figure(new Position(game_window.width_in_blocks / 2, 1));
+let current_figure = new FigureT(new Position(game_window.width_in_blocks / 2, 1));
 let collision_detector = new CollisionDetector(game_window);
 
 
@@ -88,7 +107,7 @@ function game_update(dt) {
             dead_blocks.push(block);
         });
         collision_detector.setCells(current_figure.getBlocks, 2);
-        current_figure = new Figure(new Position(game_window.width_in_blocks / 2, 1));
+        current_figure = randomizer.createRandomFigureType(new Position(game_window.width_in_blocks / 2, 1));
     }
 }
 

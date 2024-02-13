@@ -5,7 +5,7 @@ export default class CollisionDetector {
 	this.window = game_window;
 
         this.cells = new Array(this.window.height_in_blocks);
-        for(var i = 0; i < this.window.height_in_blocks; i++) {
+        for(let i = 0; i < this.window.height_in_blocks; i++) {
             this.cells[i] = new Array(this.window.width_in_blocks);
             this.cells[i].fill(0);
         }

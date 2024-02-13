@@ -17,21 +17,16 @@ const Directions = Object.freeze({
     }
 });
 
-const FigureType = Object.freeze({
-    S: 0,
-    T: 1
-});
-
-export default class Figure {
-    constructor(grid_position) {
+class Figure {
+    constructor(grid_position, block_positions_map) {
         this.pos = grid_position;
         this.falling_speed = 100;
         this.falling_time_elapsed = 0;
         this.facing = Directions.NORTH;
-        //this.type = FigureType.T; // todo
 
+        this.block_positions_map = block_positions_map;
         this.blocks = [];
-        const relative_positions = figure_T_map.get(this.facing);
+        const relative_positions = this.block_positions_map.get(this.facing);
         for(let i = 0; i < relative_positions.length; i++) {
             const pos = new Position(
                 this.pos.x + relative_positions[i].x,
@@ -86,7 +81,7 @@ export default class Figure {
     }
 
     rotate(direction_enum) {
-        const relative_positions = figure_T_map.get(direction_enum);
+        const relative_positions = this.block_positions_map.get(direction_enum);
         this.facing = direction_enum;
         for(let i = 0; i < this.getBlocks.length; i++) {
             const new_pos = new Position(
@@ -107,76 +102,99 @@ export default class Figure {
 
 }
 
+export class FigureT extends Figure {
+    constructor(grid_position) {
+        const block_positions_map = new Map();
+        /*
+         *  #
+         * #o#
+         */
+        block_positions_map.set(Directions.NORTH, [
+            new Position(-1, 0),
+            new Position(0, -1),
+            new Position(0, 0),
+            new Position(1, 0)
+        ]);
 
+        /*
+         *  #
+         *  o#
+         *  #
+         */
+        block_positions_map.set(Directions.EAST, [
+            new Position(0, 0),
+            new Position(0, -1),
+            new Position(1, 0),
+            new Position(0, 1)
+        ]);
 
-const figure_S_map = new Map();
-/*
- * #
- * #o
- *  #
- */
-figure_S_map.set(Directions.NORTH, [
-    new Position(0, 0),
-    new Position(0, -1),
-    new Position(-1, -1),
-    new Position(1, 0),
-]);
+        /*
+         * #o#
+         *  #
+         */
+        block_positions_map.set(Directions.SOUTH, [
+            new Position(0, 0),
+            new Position(-1, 0),
+            new Position(1, 0),
+            new Position(0, 1)
+        ]);
 
-/*
- *   o#
- *  ##
- */
-figure_S_map.set(Directions.EAST, [
-    new Position(0, 0),
-    new Position(0, 1),
-    new Position(1, 0),
-    new Position(1, -1),
-]);
-//------------------------
+        /*
+         *  #
+         * #o
+         *  #
+         */
+        block_positions_map.set(Directions.WEST, [
+            new Position(0, 0),
+            new Position(0, -1),
+            new Position(-1, 0),
+            new Position(0, 1)
+        ]);
 
-const figure_T_map = new Map();
-/*
- *  #
- * #o#
- */
-figure_T_map.set(Directions.NORTH, [
-    new Position(-1, 0),
-    new Position(0, -1),
-    new Position(0, 0),
-    new Position(1, 0)
-]);
+        super(grid_position, block_positions_map);
+    }
+}
 
-/*
- *  #
- *  o#
- *  #
- */
-figure_T_map.set(Directions.EAST, [
-    new Position(0, 0),
-    new Position(0, -1),
-    new Position(1, 0),
-    new Position(0, 1)
-]);
+export class FigureS extends Figure {
+    constructor(grid_position) {
+        const block_positions_map = new Map();
+        /*
+         * #
+         * #o
+         *  #
+         */
+        block_positions_map.set(Directions.NORTH, [
+            new Position(0, 0),
+            new Position(0, -1),
+            new Position(-1, -1),
+            new Position(1, 0),
+        ]);
 
-/*
- * #o#
- *  #
- */
-figure_T_map.set(Directions.SOUTH, [
-    new Position(0, 0),
-    new Position(-1, 0),
-    new Position(1, 0),
-    new Position(0, 1)
-]);
+        block_positions_map.set(Directions.SOUTH, [
+            new Position(0, 0),
+            new Position(0, -1),
+            new Position(-1, -1),
+            new Position(1, 0),
+        ]);
 
-/*
- *  #
- * #o
- *  #
- */
-figure_T_map.set(Directions.WEST, [
-    new Position(0, 0),
-    new Position(0, -1),
-    new Position(-1, 0),
-    new Position(0, 1)
-]);
+        /*
+         *   o#
+         *  ##
+         */
+        block_positions_map.set(Directions.EAST, [
+            new Position(0, 0),
+            new Position(0, 1),
+            new Position(1, 0),
+            new Position(1, -1),
+        ]);
+
+        block_positions_map.set(Directions.WEST, [
+            new Position(0, 0),
+            new Position(0, 1),
+            new Position(1, 0),
+            new Position(1, -1),
+        ]);
+
+        super(grid_position, block_positions_map);
+    }
+}
