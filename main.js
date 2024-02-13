@@ -60,7 +60,7 @@ class Renderer {
 const game_window = new GameWindow();
 const renderer = new Renderer(game_window);
 const dead_blocks = [];
-let current_figure = new Figure(new Position(3, 0));
+let current_figure = new Figure(new Position(game_window.width_in_blocks / 2, 1));
 let collision_detector = new CollisionDetector(game_window);
 
 
@@ -69,7 +69,7 @@ window.onload = function() {
     context = canvas.getContext("2d");
     renderer.setContext(context);
 
-    document.addEventListener("keyup", handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
 }
 
 
@@ -78,7 +78,7 @@ function game_update(dt) {
         current_figure.update(dt);
     }
 
-    // todo: if at least one block collides with something that is below it, the figure must be converted to `dead`
+    // todo: if at least one block collides with something that is below it, the five   gure must be converted to `dead`
 
     // todo: check collisions only when the block moves
     if(collision_detector.willFigureCollideWithGround(current_figure) ||
@@ -88,7 +88,7 @@ function game_update(dt) {
             dead_blocks.push(block);
         });
         collision_detector.setCells(current_figure.getBlocks, 2);
-        current_figure = new Figure(new Position(3, 0));
+        current_figure = new Figure(new Position(game_window.width_in_blocks / 2, 1));
     }
 }
 
@@ -134,6 +134,14 @@ function handleKeyPress(e) {
 
     if(e.code == "ArrowUp") {
         current_figure.goUp();
+    }
+
+    if(e.key == "e") {
+        current_figure.rotateClockwise();
+    }
+
+    if(e.key == "q") {
+        current_figure.rotateCounterClockwise();
     }
 
     if(e.code == "Enter") {

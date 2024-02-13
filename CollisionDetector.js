@@ -33,6 +33,7 @@ export default class CollisionDetector {
         );
     }
 
+    // todo: pass in only the position, not a block!
     willBlockCollideWithGround(block) {
         return (block.pos.y + 1 >= this.window.height_in_blocks);
     }
