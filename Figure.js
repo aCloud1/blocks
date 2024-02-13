@@ -70,11 +70,11 @@ export default class Figure {
     }
 
     rotateCounterClockwise() {
-        // let direction = this.facing + 1;
-        // if(direction > 3) {
-        //  direction %= 4;
-        //  }
-        // this.rotate(direction);
+        let direction = this.facing - 1;
+        if(direction < 0) {
+            direction = Directions.WEST;
+        }
+        this.rotate(direction);
     }
 
     rotateClockwise() {
@@ -86,8 +86,6 @@ export default class Figure {
     }
 
     rotate(direction_enum) {
-        console.log(Directions.fromValue(direction_enum));
-        console.log(figure_T_map.get(direction_enum));
         const relative_positions = figure_T_map.get(direction_enum);
         this.facing = direction_enum;
         for(let i = 0; i < this.getBlocks.length; i++) {
@@ -142,10 +140,10 @@ const figure_T_map = new Map();
  * #o#
  */
 figure_T_map.set(Directions.NORTH, [
-    new Position(0, 0),
-    new Position(0, -1),
     new Position(-1, 0),
-    new Position(0, 1)
+    new Position(0, -1),
+    new Position(0, 0),
+    new Position(1, 0)
 ]);
 
 /*
@@ -155,9 +153,9 @@ figure_T_map.set(Directions.NORTH, [
  */
 figure_T_map.set(Directions.EAST, [
     new Position(0, 0),
-    new Position(-1, 0),
-    new Position(0, 1),
-    new Position(1, 0)
+    new Position(0, -1),
+    new Position(1, 0),
+    new Position(0, 1)
 ]);
 
 /*
@@ -166,9 +164,9 @@ figure_T_map.set(Directions.EAST, [
  */
 figure_T_map.set(Directions.SOUTH, [
     new Position(0, 0),
-    new Position(0, -1),
-    new Position(0, 1),
-    new Position(1, 0)
+    new Position(-1, 0),
+    new Position(1, 0),
+    new Position(0, 1)
 ]);
 
 /*
@@ -178,7 +176,7 @@ figure_T_map.set(Directions.SOUTH, [
  */
 figure_T_map.set(Directions.WEST, [
     new Position(0, 0),
-    new Position(-1, 0),
     new Position(0, -1),
-    new Position(1, 0)
+    new Position(-1, 0),
+    new Position(0, 1)
 ]);
