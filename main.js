@@ -1,4 +1,4 @@
-import {FigureT, FigureS} from "./Figure.js"
+import {FigureT, FigureS, FigureL, FigureLMirrored, FigureI} from "./Figure.js"
 import Position from "./Position.js"
 import CollisionDetector from "./CollisionDetector.js"
 
@@ -65,11 +65,17 @@ class Randomizer {
     }
 
     createRandomFigureType(position) {
-        switch(this.generateRandomInt(0, 2)) {
+        switch(this.generateRandomInt(0, 5)) {
             case 0:
                 return new FigureS(position);
             case 1:
                 return new FigureT(position);
+            case 2:
+                return new FigureL(position);
+            case 3:
+                return new FigureLMirrored(position);
+            case 4:
+                return new FigureI(position);
         }
     }
 }
@@ -77,10 +83,10 @@ class Randomizer {
 
 const game_window = new GameWindow();
 const renderer = new Renderer(game_window);
+const collision_detector = new CollisionDetector(game_window);
 const randomizer = new Randomizer();
 const dead_blocks = [];
 let current_figure = new FigureT(new Position(game_window.width_in_blocks / 2, 1));
-let collision_detector = new CollisionDetector(game_window);
 
 
 window.onload = function() {

@@ -82,6 +82,7 @@ class Figure {
 
     rotate(direction_enum) {
         const relative_positions = this.block_positions_map.get(direction_enum);
+                    console.log(Directions.fromValue(direction_enum));
         this.facing = direction_enum;
         for(let i = 0; i < this.getBlocks.length; i++) {
             const new_pos = new Position(
@@ -193,6 +194,157 @@ export class FigureS extends Figure {
             new Position(0, 1),
             new Position(1, 0),
             new Position(1, -1),
+        ]);
+
+        super(grid_position, block_positions_map);
+    }
+}
+
+export class FigureL extends Figure {
+    constructor(grid_position) {
+        const block_positions_map = new Map();
+        /*
+         * #
+         * o
+         * ##
+         */
+        block_positions_map.set(Directions.NORTH, [
+            new Position(0, -1),
+            new Position(0, 0),
+            new Position(0, 1),
+            new Position(1, 1),
+        ]);
+
+        /*
+         *  #o#
+         *  # 
+         */
+        block_positions_map.set(Directions.EAST, [
+            new Position(-1, 0),
+            new Position(0, 0),
+            new Position(1, 0),
+            new Position(-1, 1),
+        ]);
+
+        /*
+         * ##
+         *  o
+         *  # 
+         */
+        block_positions_map.set(Directions.SOUTH, [
+            new Position(-1, -1),
+            new Position(0, -1),
+            new Position(0, 0),
+            new Position(0, 1),
+        ]);
+
+        /*
+         *    #
+         *  #o#
+         */
+        block_positions_map.set(Directions.WEST, [
+            new Position(1, -1),
+            new Position(-1, 0),
+            new Position(0, 0),
+            new Position(1, 0),
+        ]);
+
+        super(grid_position, block_positions_map);
+    }
+}
+
+
+export class FigureLMirrored extends Figure {
+    constructor(grid_position) {
+        const block_positions_map = new Map();
+        /*
+         *  #
+         *  o
+         * ##
+         */
+        block_positions_map.set(Directions.NORTH, [
+            new Position(0, -1),
+            new Position(0, 0),
+            new Position(0, 1),
+            new Position(-1, 1),
+        ]);
+
+        /*
+         *  #
+         *  #o#
+         */
+        block_positions_map.set(Directions.EAST, [
+            new Position(-1, -1),
+            new Position(-1, 0),
+            new Position(0, 0),
+            new Position(1, 0),
+        ]);
+
+        /*
+         *  ##
+         *  o
+         *  # 
+         */
+        block_positions_map.set(Directions.SOUTH, [
+            new Position(0, -1),
+            new Position(1, -1),
+            new Position(0, 0),
+            new Position(0, 1),
+        ]);
+
+        /*
+         *  #o#
+         *    #
+         */
+        block_positions_map.set(Directions.WEST, [
+            new Position(-1, 0),
+            new Position(0, 0),
+            new Position(1, 0),
+            new Position(1, 1),
+        ]);
+
+        super(grid_position, block_positions_map);
+    }
+}
+
+export class FigureI extends Figure {
+    constructor(grid_position) {
+        const block_positions_map = new Map();
+        /*
+         *  #
+         *  #
+         *  o
+         *  #
+         */
+        block_positions_map.set(Directions.NORTH, [
+            new Position(0, -2),
+            new Position(0, -1),
+            new Position(0, 0),
+            new Position(0, 1),
+        ]);
+
+        block_positions_map.set(Directions.SOUTH, [
+            new Position(0, -2),
+            new Position(0, -1),
+            new Position(0, 0),
+            new Position(0, 1),
+        ]);
+
+        /*
+         *  #o##
+         */
+        block_positions_map.set(Directions.EAST, [
+            new Position(-1, 0),
+            new Position(0, 0),
+            new Position(1, 0),
+            new Position(2, 0),
+        ]);
+
+        block_positions_map.set(Directions.WEST, [
+            new Position(-1, 0),
+            new Position(0, 0),
+            new Position(1, 0),
+            new Position(2, 0),
         ]);
 
         super(grid_position, block_positions_map);
