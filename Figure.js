@@ -86,7 +86,6 @@ class Figure {
 
     rotate(direction_enum) {
         const relative_positions = this.block_positions_map.get(direction_enum);
-                    console.log(Directions.fromValue(direction_enum));
         this.facing = direction_enum;
         for(let i = 0; i < this.getBlocks.length; i++) {
             const new_pos = new Position(

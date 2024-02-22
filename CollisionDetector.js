@@ -41,10 +41,10 @@ export default class CollisionDetector {
     blockCollidesWithBounds(block) {
         const pos = block.getPosition;
         if(
-            pos.y < 0 ||
-            pos.y > this.cells.length ||
+            // pos.y < 0 ||
+            pos.y >= this.cells.length ||
             pos.x < 0 ||
-            pos.x > this.cells[0].length
+            pos.x >= this.cells[0].length
         ) {
             return true;
         }
@@ -52,7 +52,10 @@ export default class CollisionDetector {
     }
 
     isCellEmpty(pos) {
-        console.log(pos);
+        // in this case ignore so that figures could be spawned above the canvas
+        if(pos.y < 0)
+            return true;
+
         return this.cells[pos.y][pos.x] === 0;
     }
 

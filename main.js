@@ -95,9 +95,7 @@ function game_update(dt) {
 
         // todo: check collisions only when the block moves
         if(collision_detector.figureCollides(current_figure)) {
-            console.log(current_figure.getPosition);
             current_figure.goUp();
-            console.log(current_figure.getPosition);
             current_figure.getBlocks.forEach(block => {
                 dead_blocks.push(block);
             });
@@ -137,7 +135,6 @@ function handleKeyPress(e) {
     if(e.code == "ArrowLeft") {
         current_figure.goLeft();
         if(collision_detector.figureCollides(current_figure)) {
-            console.log("COLLIDING LEFT");
             current_figure.goRight();
         }
     }
@@ -145,7 +142,6 @@ function handleKeyPress(e) {
     if(e.code == "ArrowRight") {
         current_figure.goRight();
         if(collision_detector.figureCollides(current_figure)) {
-            console.log("COLLIDING RIGHT");
             current_figure.goLeft();
         }
     }
@@ -167,7 +163,6 @@ function handleKeyPress(e) {
     if(e.key == "e") {
         current_figure.rotateClockwise();
         if(collision_detector.figureCollides(current_figure)) {
-            console.log("would collide - not rotating");
             current_figure.rotateCounterClockwise();
         }
     }
@@ -175,7 +170,6 @@ function handleKeyPress(e) {
     if(e.key == "q") {
         current_figure.rotateCounterClockwise();
         if(collision_detector.figureCollides(current_figure)) {
-            console.log("would collide - not rotating");
             current_figure.rotateClockwise();
         }
     }
@@ -184,6 +178,12 @@ function handleKeyPress(e) {
         debug_mode = !debug_mode;
         renderer.debug_mode = debug_mode;
         console.log("Debug mode is: " + debug_mode);
+    }
+
+    if(e.code == "Space") {
+        while(!collision_detector.figureCollides(current_figure)) {
+            current_figure.goDown();
+        }
     }
 }
 
