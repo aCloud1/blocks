@@ -1,7 +1,9 @@
 import {FigureT, FigureS, FigureL, FigureLMirrored, FigureI} from "./Figure.js"
 import Position from "./Position.js"
-import Rectangle from "./Rectangle.js"
 import CollisionDetector from "./CollisionDetector.js"
+import Renderer from "./Renderer.js"
+import GameWindow from "./GameWindow.js"
+import Button from "./Button.js"
 
 let canvas;
 let context;
@@ -26,71 +28,6 @@ class Game {
     }
 }
 
-class GameWindow {
-    constructor() {
-        this.block_size = 30;
-
-        this.width_in_blocks = 10;
-        this.height_in_blocks = 20;
-
-        this.width = this.width_in_blocks * this.block_size;
-        this.height = this.height_in_blocks * this.block_size;
-    }
-
-    get getBlockSize() {
-        return this.block_size;
-    }
-}
-
-
-class Renderer {
-    constructor(game_window) {
-        this.window = game_window;
-    }
-
-    setContext(context) {
-        this.context = context;
-    }
-
-    renderBlock(block, fill_style = "blue") {
-        this.context.fillStyle = fill_style;
-        this.context.fillRect(
-            block.getPosition.x * this.window.block_size,
-            block.getPosition.y * this.window.block_size,
-            this.window.getBlockSize,
-            this.window.getBlockSize
-        );
-    }
-
-    renderFigure(figure) {
-        figure.getBlocks.forEach(b => this.renderBlock(b, "green"));
-    }
-
-    renderText(position, text, fill_style, font = "24px Arial") {
-        this.context.font = font;
-        this.context.fillStyle = fill_style;
-        this.context.fillText(text, position.x, position.y);
-    }
-
-    renderButton(button) {
-        this.context.fillStyle = "blue";
-        this.context.fillRect(
-            button.getPosition().x,
-            button.getPosition().y,
-            button.getDimensions().x,
-            button.getDimensions().y
-        );
-
-        const offset_x = button.title.length * 4;
-        const offset_y = button.font_size / 4;
-        const pos_with_offset = new Position(
-            button.getPosition().x + button.getDimensions().x / 2 - offset_x,
-            button.getPosition().y + button.getDimensions().y / 2 + offset_y
-        );
-
-        this.renderText(pos_with_offset, button.title, "white", button.getFont());
-    }
-}
 
 class Randomizer {
     constructor() {
@@ -114,52 +51,6 @@ class Randomizer {
             case 4:
                 return new FigureI(position);
         }
-    }
-}
-
-class Button {
-    constructor(position, dimensions, title, activation_function) {
-        this.rect = new Rectangle(
-            position.x,
-            position.y,
-            position.x + dimensions.x,
-            position.y + dimensions.y
-        );
-        this.dimensions = dimensions;
-        this.title = title;
-        this.activation_function = activation_function;
-        this.font_size = 24;
-        this.font = "Arial";
-    }
-
-    getRect() {
-        return this.rect;
-    }
-
-    getPosition() {
-        return this.rect.left_top;
-    }
-
-    getDimensions() {
-        return this.dimensions;
-    }
-
-    // update(dt) {
-    //     // todo: if mouse clicked inside the button
-    //     clicked = false;
-    //     if(clicked) {
-    //         activateFunction();
-    //     }
-    //
-    //     // todo: other updates?
-    // }
-
-    activate() {
-        this.activation_function();
-    }
-
-    getFont() {
-        return `${this.font_size}px ${this.font}`;
     }
 }
 
@@ -203,9 +94,10 @@ function game_update(dt) {
         // todo: if at least one block collides with something that is below it, the five   gure must be converted to `dead`
 
         // todo: check collisions only when the block moves
-        if(collision_detector.willFigureCollideWithGround(current_figure) ||
-            collision_detector.willFigureCollideDown(current_figure)
-        ) {
+        if(collision_detector.figureCollides(current_figure)) {
+            console.log(current_figure.getPosition);
+            current_figure.goUp();
+            console.log(current_figure.getPosition);
             current_figure.getBlocks.forEach(block => {
                 dead_blocks.push(block);
             });
@@ -243,37 +135,54 @@ const loop = time => {
 
 function handleKeyPress(e) {
     if(e.code == "ArrowLeft") {
-        if(!collision_detector.willFigureCollideLeft(current_figure)) {
-            current_figure.goLeft();
+        current_figure.goLeft();
+        if(collision_detector.figureCollides(current_figure)) {
+            console.log("COLLIDING LEFT");
+            current_figure.goRight();
         }
     }
 
     if(e.code == "ArrowRight") {
-        if(!collision_detector.willFigureCollideRight(current_figure)) {
-            current_figure.goRight();
+        current_figure.goRight();
+        if(collision_detector.figureCollides(current_figure)) {
+            console.log("COLLIDING RIGHT");
+            current_figure.goLeft();
         }
     }
     
     if(e.code == "ArrowDown") {
-        if(!collision_detector.willFigureCollideDown(current_figure)) {
-            current_figure.goDown();
+        current_figure.goDown();
+        if(collision_detector.figureCollides(current_figure)) {
+            current_figure.goUp();
         }
     }
 
     if(e.code == "ArrowUp") {
         current_figure.goUp();
+        if(collision_detector.figureCollides(current_figure)) {
+            current_figure.goDown();
+        }
     }
 
     if(e.key == "e") {
         current_figure.rotateClockwise();
+        if(collision_detector.figureCollides(current_figure)) {
+            console.log("would collide - not rotating");
+            current_figure.rotateCounterClockwise();
+        }
     }
 
     if(e.key == "q") {
         current_figure.rotateCounterClockwise();
+        if(collision_detector.figureCollides(current_figure)) {
+            console.log("would collide - not rotating");
+            current_figure.rotateClockwise();
+        }
     }
 
     if(e.code == "Enter") {
         debug_mode = !debug_mode;
+        renderer.debug_mode = debug_mode;
         console.log("Debug mode is: " + debug_mode);
     }
 }

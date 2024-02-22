@@ -38,67 +38,36 @@ export default class CollisionDetector {
         return (block.pos.y + 1 >= this.window.height_in_blocks);
     }
 
-    willBlockCollideLeft(block) {
+    blockCollidesWithBounds(block) {
         const pos = block.getPosition;
-        if(this.cells[pos.y][pos.x - 1] === 0) {
-            return false;
+        if(
+            pos.y < 0 ||
+            pos.y > this.cells.length ||
+            pos.x < 0 ||
+            pos.x > this.cells[0].length
+        ) {
+            return true;
         }
-        return true;
+        else return false;
     }
 
-    willBlockCollideRight(block) {
-        const pos = block.getPosition;
-        if(this.cells[pos.y][pos.x + 1] === 0) {
-            return false;
-        }
-        return true;
+    isCellEmpty(pos) {
+        console.log(pos);
+        return this.cells[pos.y][pos.x] === 0;
     }
 
-    willBlockCollideDown(block) {
-        const pos = block.getPosition;
-        if(this.cells[pos.y + 1][pos.x] === 0) {
-            return false;
-        }
-        return true;
+    blockCollidesWithBlocks(block) {
+        return (this.blockCollidesWithBounds(block) || !this.isCellEmpty(block.getPosition));
     }
 
-    willFigureCollideWithGround(figure) {
+    figureCollides(figure) {
         const blocks = figure.getBlocks;
         for(let i = 0; i < blocks.length; i++) {
-            if(this.willBlockCollideWithGround(blocks[i])) {
+            if(this.blockCollidesWithBounds(blocks[i]) || this.blockCollidesWithBlocks(blocks[i])) {
                 return true;
             }
         }
-        return false;
-    }
 
-    willFigureCollideLeft(figure) {
-        const blocks = figure.getBlocks;
-        for(let i = 0; i < blocks.length; i++) {
-            if(this.willBlockCollideLeft(blocks[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    willFigureCollideRight(figure) {
-        const blocks = figure.getBlocks;
-        for(let i = 0; i < blocks.length; i++) {
-            if(this.willBlockCollideRight(blocks[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    willFigureCollideDown(figure) {
-        const blocks = figure.getBlocks;
-        for(let i = 0; i < blocks.length; i++) {
-            if(this.willBlockCollideDown(blocks[i])) {
-                return true;
-            }
-        }
         return false;
     }
 }

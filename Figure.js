@@ -18,11 +18,11 @@ const Directions = Object.freeze({
 });
 
 class Figure {
-    constructor(grid_position, block_positions_map) {
+    constructor(grid_position, block_positions_map, direction_enum = Directions.NORTH, falling_time_elapsed = 0) {
         this.pos = grid_position;
         this.falling_speed = 100;
-        this.falling_time_elapsed = 0;
-        this.facing = Directions.NORTH;
+        this.falling_time_elapsed = falling_time_elapsed;
+        this.facing = direction_enum;
 
         this.block_positions_map = block_positions_map;
         this.blocks = [];
@@ -34,6 +34,10 @@ class Figure {
             );
             this.blocks.push(new Block(pos));
         }
+    }
+
+    clone() {
+        return new Figure(this.pos, this.block_positions_map, this.facing, this.falling_time_elapsed);
     }
 
     get getPosition() {
