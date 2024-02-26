@@ -1,4 +1,5 @@
-import {FigureT, FigureS, FigureL, FigureLMirrored, FigureI} from "./Figure.js"
+import Game from "./Game.js"
+import Randomizer from "./Randomizer.js"
 import Position from "./Position.js"
 import CollisionDetector from "./CollisionDetector.js"
 import Renderer from "./Renderer.js"
@@ -8,51 +9,6 @@ import Button from "./Button.js"
 let canvas;
 let context;
 
-let debug_mode = false;
-
-class Game {
-    constructor() {
-        this.running = false;
-    }
-
-    isRunning() {
-        return this.running;
-    }
-
-    start() {
-        this.running = true;
-    }
-
-    stop() {
-        this.running = false;
-    }
-}
-
-
-class Randomizer {
-    constructor() {
-    }
-
-    // `max` is non-inclusive
-    generateRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
-    }
-
-    createRandomFigureType(position) {
-        switch(this.generateRandomInt(0, 5)) {
-            case 0:
-                return new FigureS(position);
-            case 1:
-                return new FigureT(position);
-            case 2:
-                return new FigureL(position);
-            case 3:
-                return new FigureLMirrored(position);
-            case 4:
-                return new FigureI(position);
-        }
-    }
-}
 
 const game = new Game();
 const game_window = new GameWindow();
@@ -60,7 +16,7 @@ const renderer = new Renderer(game_window);
 const collision_detector = new CollisionDetector(game_window);
 const randomizer = new Randomizer();
 const dead_blocks = [];
-let current_figure = new FigureT(new Position(game_window.width_in_blocks / 2, 1));
+let current_figure = randomizer.createRandomFigureType(new Position(game_window.width_in_blocks / 2, 1));
 
 function startGame() {
     game.start();
@@ -87,7 +43,7 @@ function game_update(dt) {
         // todo: handle menu events
     }
     else {
-        if(!debug_mode) {
+        if(!game.inDebugMode()) {
             current_figure.update(dt);
         }
 
@@ -178,9 +134,9 @@ function handleKeyPress(e) {
     }
 
     if(e.code == "Enter") {
-        debug_mode = !debug_mode;
-        renderer.debug_mode = debug_mode;
-        console.log("Debug mode is: " + debug_mode);
+        game.setDebugMode(!game.inDebugMode());
+        renderer.debug_mode = game.inDebugMode();
+        console.log("Debug mode is: " + game.inDebugMode());
     }
 
     if(e.code == "Space") {
