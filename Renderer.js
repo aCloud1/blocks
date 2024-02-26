@@ -29,6 +29,22 @@ export default class Renderer {
         }
     }
 
+    renderDeadBlocks(array2d, fill_style = "blue") {
+        this.context.fillStyle = fill_style;
+        for(let i = 0; i < array2d.length; i++) {
+            for(let j = 0; j < array2d[i].length; j++) {
+                if(array2d[i][j] === 2) {
+                    this.context.fillRect(
+                        j * this.window.block_size,
+                        i * this.window.block_size,
+                        this.window.getBlockSize,
+                        this.window.getBlockSize
+                    );
+                }
+            }
+        }
+    }
+
     renderFigure(figure) {
         figure.getBlocks.forEach(b => this.renderBlock(b, "green"));
     }

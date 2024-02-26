@@ -101,6 +101,8 @@ function game_update(dt) {
             });
             collision_detector.setCells(current_figure.getBlocks, 2);
             current_figure = randomizer.createRandomFigureType(new Position(game_window.width_in_blocks / 2, 1));
+
+            collision_detector.clearFullRows();
         }
     }
 }
@@ -114,7 +116,8 @@ function game_render() {
         context.fillStyle = "black";
         context.fillRect(0, 0, game_window.width, game_window.height);
 
-        dead_blocks.forEach(block => renderer.renderBlock(block));
+        // dead_blocks.forEach(block => renderer.renderBlock(block));
+        renderer.renderDeadBlocks(collision_detector.getCells());
         renderer.renderFigure(current_figure);
     }
 }
