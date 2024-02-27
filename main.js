@@ -41,6 +41,11 @@ const loop = time => {
             renderer.renderGame();
             break;
 
+        case GameStates.IN_GAME_OVER:
+            // todo: show game over screen
+            console.log("GAME_OVER");
+            break;
+
         default:
             break;
     }

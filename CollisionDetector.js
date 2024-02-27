@@ -43,10 +43,19 @@ export default class CollisionDetector {
         return (block.pos.y + 1 >= this.window.height_in_blocks);
     }
 
+    isFigureAboveBounds(figure) {
+        const blocks = figure.getBlocks;
+        for(let i = 0; i < blocks.length; i++) {
+            if(blocks[i].getPosition.y < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     blockCollidesWithBounds(block) {
         const pos = block.getPosition;
         if(
-            // pos.y < 0 ||
             pos.y >= this.cells.length ||
             pos.x < 0 ||
             pos.x >= this.cells[0].length

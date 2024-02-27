@@ -7,6 +7,7 @@ export const GameStates = Object.freeze({
     IN_GAME: 1,
     IN_MAIN_MENU: 2,
     IN_PAUSE_MENU: 3,
+    IN_GAME_OVER: 4,
 });
 
 
@@ -65,6 +66,12 @@ export class Game {
 	// todo: check collisions only when the block moves
 	if(this.collision_detector.figureCollides(this.current_figure)) {
 	    this.current_figure.goUp();
+
+	    if(this.collision_detector.isFigureAboveBounds(this.current_figure)) {
+		this.state = GameStates.IN_GAME_OVER;
+		this.running = false;
+		return;
+	    }
 	    this.spawnNewFigure();
 	    this.collision_detector.clearFullRows();
 	}
