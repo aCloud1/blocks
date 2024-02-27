@@ -1,12 +1,16 @@
 body {
     text-align: center;
+    background-color: slateblue;
 }
 
 .frame {
+    display: flex;
     text-align: center;
-    background-color: cadetblue;
+    background-color: #c3bdebca;
 
     width: 60%;
+    min-width: 700px;
+    max-width: 700px;
     height: 600px;
     margin: auto;
     padding: 20px;
@@ -19,7 +23,7 @@ body {
 
 .canvas_container {
     margin: auto;
-    width: 100%;
+    width: 50%;
     min-width: 300px;
     max-width: 300px;
 
@@ -28,11 +32,39 @@ body {
     max-height: 600px;
 
     text-align: center;
-    justify-content: center;
-    align-items: center;
 
-    border-style: dashed;
-    border-color: red;
+    border-style: double;
+    border-color: darkslateblue;
+
+    background-color: black;
+}
+
+.hud_container {
+    margin: auto;
+    margin-left: 0px;
+    margin-right: 0px;
+
+    width: 40%;
+}
+
+.hud_line {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.hud_param {
+    display: inline;
+    text-align: left;
+    padding-right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.hud_value {
+    display: inline;
+    text-align: right;
+    padding-left: 20px;
+    font-size: 30px;
 }
 
 canvas {
