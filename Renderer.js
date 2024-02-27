@@ -1,9 +1,9 @@
 import Position from "./Position.js"
 
 export default class Renderer {
-    constructor(game_window) {
+    constructor(game, game_window) {
+        this.game = game
         this.window = game_window;
-        this.debug_mode = false;
     }
 
     setContext(context) {
@@ -19,7 +19,7 @@ export default class Renderer {
             this.window.getBlockSize
         );
 
-        if(this.debug_mode) {
+        if(this.game.inDebugMode()) {
             const offset = this.window.block_size / 2;
             const pos_in_canvas = new Position(
                 block.pos.x * this.window.block_size + offset / 2,
@@ -72,6 +72,17 @@ export default class Renderer {
         );
 
         this.renderText(pos_with_offset, button.title, "white", button.getFont());
+    }
+
+    renderMenu(menu) {
+        menu.getButtons().forEach(button => this.renderButton(button));
+    }
+
+    renderGame() {
+        this.context.fillStyle = "black";
+        this.context.fillRect(0, 0, this.window.width, this.window.height);
+        this.renderDeadBlocks(this.game.collision_detector.getCells());
+        this.renderFigure(this.game.current_figure);
     }
 }
 
