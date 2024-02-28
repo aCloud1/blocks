@@ -88,7 +88,7 @@ export default class CollisionDetector {
         return false;
     }
 
-    getFullRows() {
+    getIdsOfFullRows() {
         const rows_to_clear = [];
         let is_full = true;
 
@@ -108,8 +108,8 @@ export default class CollisionDetector {
         return rows_to_clear;
     }
 
-    clearFullRows() {
-        const rows = this.getFullRows().toReversed();
+    clearRows(row_ids) {
+        const rows = row_ids.toReversed();
         for(const i of rows) {
             this.cells.splice(i, 1);
         }

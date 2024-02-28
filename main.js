@@ -15,12 +15,21 @@ const renderer = new Renderer(game, game_window);
 
 window.onload = function() {
     canvas = document.getElementById("board");
+    counter_time = document.getElementById("counter_time");
+    counter_score = document.getElementById("counter_score");
+
     context = canvas.getContext("2d");
     renderer.setContext(context);
     menu.setCanvas(canvas);
 
     document.addEventListener("keydown", event => game.handleInput(event));
     document.addEventListener("click", event => menu.handleInput(event));
+}
+
+
+function updateGUI() {
+    counter_time.innerHTML = (game.getTimeElapsed() / 1000).toFixed(2);
+    counter_score.innerHTML = game.getScore();
 }
 
 const loop = time => {
@@ -38,6 +47,7 @@ const loop = time => {
 
         case GameStates.IN_GAME:
             game.update(dt);
+            updateGUI();
             renderer.renderGame();
             break;
 

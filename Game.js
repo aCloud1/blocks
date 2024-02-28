@@ -13,7 +13,6 @@ export const GameStates = Object.freeze({
 
 export class Game {
     constructor(game_window) {
-	this.running = false;
 	this.debug_mode = false;
 	this.state = GameStates.IN_MAIN_MENU;
 
@@ -22,23 +21,28 @@ export class Game {
 	this.collision_detector = new CollisionDetector(game_window);
 
 	this.current_figure = this.randomizer.createRandomFigureType(new Position(this.window.width_in_blocks / 2, 1));
+
+	this.score = 0;
+	this.time_elapsed = 0;
     }
 
     getState() {
 	return this.state;
     }
 
-    isRunning() {
-	return this.running;
+    getTimeElapsed() {
+	return this.time_elapsed;
+    }
+
+    getScore() {
+	return this.score;
     }
 
     start() {
-	this.running = true;
 	this.state = GameStates.IN_GAME;
     }
 
     stop() {
-	this.running = false;
 	this.state = GameStates.IN_MAIN_MENU;
     }
 
@@ -50,31 +54,47 @@ export class Game {
 	this.debug_mode = boolean;
     }
 
+    givePointsForFigurePlacement(figure) {
+	this.score += figure.getBlocks.length * 10;
+    }
+
+    givePointsForClearingRows(number_of_rows) {
+	this.score += number_of_rows * 100;
+    }
+
     spawnNewFigure() {
 	this.collision_detector.setCells(this.current_figure.getBlocks, 2);
 	this.current_figure = this.randomizer.createRandomFigureType(new Position(this.window.width_in_blocks / 2, 1));
+    }
+
+    handleFigureCollision() {
+	if(!this.collision_detector.figureCollides(this.current_figure)) {
+	    return;
+	}
+	this.current_figure.goUp();
+
+	if(this.collision_detector.isFigureAboveBounds(this.current_figure)) {
+	    this.state = GameStates.IN_GAME_OVER;
+	    return;
+	}
+
+	this.givePointsForFigurePlacement(this.current_figure);
+	this.spawnNewFigure();
+
+	const full_rows = this.collision_detector.getIdsOfFullRows();
+	this.givePointsForClearingRows(full_rows.length);
+	this.collision_detector.clearRows(full_rows);
     }
 
 
     update(dt) {
 	if(!this.inDebugMode()) {
 	    this.current_figure.update(dt);
+	    this.time_elapsed += dt;
 	}
-
-	// todo: if at least one block collides with something that is below it, the five   gure must be converted to `dead`
 
 	// todo: check collisions only when the block moves
-	if(this.collision_detector.figureCollides(this.current_figure)) {
-	    this.current_figure.goUp();
-
-	    if(this.collision_detector.isFigureAboveBounds(this.current_figure)) {
-		this.state = GameStates.IN_GAME_OVER;
-		this.running = false;
-		return;
-	    }
-	    this.spawnNewFigure();
-	    this.collision_detector.clearFullRows();
-	}
+	this.handleFigureCollision();
     }
 
 
@@ -116,9 +136,7 @@ export class Game {
 	    while(!this.collision_detector.figureCollides(this.current_figure)) {
 		this.current_figure.goDown();
 	    }
-
-	    this.current_figure.goUp();
-	    this.spawnNewFigure();
+	    this.handleFigureCollision();
 	}
 
 
