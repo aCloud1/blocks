@@ -74,12 +74,25 @@ export default class Renderer {
         this.renderText(pos_with_offset, button.title, "white", button.getFont());
     }
 
+    renderLabel(label) {
+        if(!label.isVisible()) {
+            return;
+        }
+
+        const pos_with_offset = new Position(
+            label.getPosition().x,
+            label.getPosition().y
+        );
+        this.renderText(pos_with_offset, label.title, label.color, label.getFont());
+    }
+
     renderMenu(menu) {
         if(this.game.isInMainMenu()) {
             this.clearCanvas();
         }
         
         menu.getButtons().forEach(button => this.renderButton(button));
+        menu.getLabels().forEach(label => this.renderLabel(label));
     }
 
     clearCanvas() {

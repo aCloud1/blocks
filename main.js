@@ -12,6 +12,7 @@ const game_window = new GameWindow();
 const game = new Game(game_window);
 
 const menu_main = new MainMenu(game);
+const menu_pause = new PauseMenu(game);
 const menu_game_over = new GameOverMenu(game);
 
 //const current_menu ???
@@ -26,6 +27,7 @@ function handleMenuEvents(event) {
             break;
 
         case GameStates.IN_PAUSE_MENU:
+            menu_pause.handleInput(event);
             break;
 
         case GameStates.IN_GAME_OVER:
@@ -45,6 +47,7 @@ window.onload = function() {
     context = canvas.getContext("2d");
     renderer.setContext(context);
     menu_main.setCanvas(canvas);
+    menu_pause.setCanvas(canvas);
     menu_game_over.setCanvas(canvas);
 
     document.addEventListener("keydown", event => game.handleInput(event));
@@ -68,6 +71,9 @@ const loop = time => {
             break;
 
         case GameStates.IN_PAUSE_MENU:
+            menu_pause.update(dt);
+            renderer.renderGame();
+            renderer.renderMenu(menu_pause);
             break;
 
         case GameStates.IN_GAME:
@@ -77,9 +83,7 @@ const loop = time => {
             break;
 
         case GameStates.IN_GAME_OVER:
-            // todo: show game over screen
             renderer.renderMenu(menu_game_over);
-            console.log("GAME_OVER");
             break;
 
         default:

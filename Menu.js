@@ -1,15 +1,22 @@
 import {GameStates} from "./Game.js"
 import Position from "./Position.js"
-import Button from "./Button.js"
+import {Button, Label} from "./Button.js"
 
 class Menu {
 	constructor(game) {
 		this.game = game;
 		this.state = GameStates.UNKNOWN;
+
+		this.buttons = [];
+		this.labels = [];
 	}
 
 	getButtons() {
 		return this.buttons;
+	}
+
+	getLabels() {
+		return this.labels;
 	}
 
 	setCanvas(canvas) {
@@ -23,6 +30,8 @@ class Menu {
 			pos.y <= rect.right_bottom.y
 		);
 	}
+
+	update(dt) {}
 
 	handleInput(event) {
 		if(this.game.getState() !== this.state) {
@@ -59,6 +68,18 @@ export class MainMenu extends Menu {
 
 
 export class PauseMenu extends Menu {
+	constructor(game) {
+		super(game);
+		this.state = GameStates.IN_MAIN_MENU;
+
+		this.labels = [
+			new Label(new Position(100, 50), "paused", true)
+		];
+	}
+
+	update(dt) {
+		this.labels.forEach(label => label.update(dt));
+	}
 }
 
 
@@ -72,5 +93,4 @@ export class GameOverMenu extends Menu {
 			new Button(new Position(50, 350), new Position(200, 75), "Main menu", () => { this.game.setState(GameStates.IN_MAIN_MENU); })
 		];
 	}
-
 }

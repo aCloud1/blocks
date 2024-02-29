@@ -167,5 +167,14 @@ export class Game {
 		this.current_figure.rotateClockwise();
 	    }
 	}
+
+	if(e.key == "Escape") {
+	    if(this.getState() === GameStates.IN_GAME) {
+		this.setState(GameStates.IN_PAUSE_MENU);
+	    }
+	    else if(this.getState() === GameStates.IN_PAUSE_MENU) {
+		this.setState(GameStates.IN_GAME);
+	    }
+	}
     }
 }
