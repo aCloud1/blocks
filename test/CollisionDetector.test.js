@@ -15,7 +15,7 @@ test("Find full rows", () => {
 
     const detector = new CollisionDetector(game_window, cells);
 
-    expect(detector.getFullRows()).toStrictEqual([1, 3]);
+    expect(detector.getIdsOfFullRows()).toStrictEqual([1, 3]);
 });
 
 test("Remove full rows and push empty ones to the front", () => {
@@ -38,7 +38,8 @@ test("Remove full rows and push empty ones to the front", () => {
     ];
 
     const detector = new CollisionDetector(game_window, cells);
-    detector.clearFullRows();
+    const row_ids = detector.getIdsOfFullRows();
+    detector.clearRows(row_ids);
 
     expect(detector.getCells()).toStrictEqual(cells_expected);
 });
