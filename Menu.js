@@ -73,7 +73,7 @@ export class PauseMenu extends Menu {
 		this.state = GameStates.IN_MAIN_MENU;
 
 		this.labels = [
-			new Label(new Position(100, 50), "paused", true)
+			new Label(new Position(100, 50), "Paused", true)
 		];
 	}
 
@@ -89,8 +89,8 @@ export class GameOverMenu extends Menu {
 		this.state = GameStates.IN_GAME_OVER;
 
 		this.buttons = [
-			new Button(new Position(50, 50), new Position(200, 75), "Play again", () => { this.game.reset(); }),
-			new Button(new Position(50, 350), new Position(200, 75), "Main menu", () => { this.game.setState(GameStates.IN_MAIN_MENU); })
+			new Button(new Position(50, 50), new Position(200, 75), "Play again", () => { this.game.start(); }),
+			new Button(new Position(50, 350), new Position(200, 75), "Main menu", () => { this.game.stop(); })
 		];
 	}
 }

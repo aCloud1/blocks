@@ -42,18 +42,20 @@ export class Game {
 	return this.score;
     }
 
-    start() {
+    reset() {
 	this.collision_detector.resetCells();
+	this.score = 0;
+	this.time_elapsed = 0;
+    }
+
+    start() {
+	this.reset();
 	this.state = GameStates.IN_GAME;
     }
 
     stop() {
+	this.reset();
 	this.state = GameStates.IN_MAIN_MENU;
-    }
-
-    reset() {
-	this.collision_detector.resetCells();
-	this.setState(GameStates.IN_GAME);
     }
 
     inDebugMode() {
@@ -167,7 +169,9 @@ export class Game {
 		this.current_figure.rotateClockwise();
 	    }
 	}
+    }
 
+    handleMenuEvent(e) {
 	if(e.key == "Escape") {
 	    if(this.getState() === GameStates.IN_GAME) {
 		this.setState(GameStates.IN_PAUSE_MENU);

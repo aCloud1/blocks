@@ -39,6 +39,13 @@ function handleMenuEvents(event) {
     }
 }
 
+function handleGameEvents(event) {
+    if(game.getState() === GameStates.IN_GAME) {
+        game.handleInput(event);
+    }
+    game.handleMenuEvent(event);
+}
+
 window.onload = function() {
     canvas = document.getElementById("board");
     counter_time = document.getElementById("counter_time");
@@ -50,7 +57,7 @@ window.onload = function() {
     menu_pause.setCanvas(canvas);
     menu_game_over.setCanvas(canvas);
 
-    document.addEventListener("keydown", event => game.handleInput(event));
+    document.addEventListener("keydown", event => handleGameEvents(event));
     document.addEventListener("click", event => handleMenuEvents(event));
 }
 
@@ -68,6 +75,7 @@ const loop = time => {
         case GameStates.IN_MAIN_MENU:
             //menu.update(dt);
             renderer.renderMenu(menu_main);
+            updateGUI();
             break;
 
         case GameStates.IN_PAUSE_MENU:
@@ -78,8 +86,8 @@ const loop = time => {
 
         case GameStates.IN_GAME:
             game.update(dt);
-            updateGUI();
             renderer.renderGame();
+            updateGUI();
             break;
 
         case GameStates.IN_GAME_OVER:
