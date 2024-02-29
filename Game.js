@@ -30,6 +30,10 @@ export class Game {
 	return this.state;
     }
 
+    setState(game_state) {
+	this.state = game_state;
+    }
+
     getTimeElapsed() {
 	return this.time_elapsed;
     }
@@ -39,6 +43,7 @@ export class Game {
     }
 
     start() {
+	this.collision_detector.resetCells();
 	this.state = GameStates.IN_GAME;
     }
 
@@ -46,8 +51,17 @@ export class Game {
 	this.state = GameStates.IN_MAIN_MENU;
     }
 
+    reset() {
+	this.collision_detector.resetCells();
+	this.setState(GameStates.IN_GAME);
+    }
+
     inDebugMode() {
 	return this.debug_mode;
+    }
+
+    isInMainMenu() {
+	return this.state === GameStates.IN_MAIN_MENU;
     }
 
     setDebugMode(boolean) {

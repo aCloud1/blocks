@@ -31,6 +31,12 @@ export default class CollisionDetector {
         }
     }
 
+    resetCells() {
+        for(let i = 0; i < this.window.height_in_blocks; i++) {
+            this.cells[i].fill(0);
+        }
+    }
+
     getCellPositionFromCoordinates(position) {
         return new Position(
             position.x / this.window.block_size,

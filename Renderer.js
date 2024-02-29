@@ -75,12 +75,20 @@ export default class Renderer {
     }
 
     renderMenu(menu) {
+        if(this.game.isInMainMenu()) {
+            this.clearCanvas();
+        }
+        
         menu.getButtons().forEach(button => this.renderButton(button));
     }
 
-    renderGame() {
+    clearCanvas() {
         this.context.fillStyle = "black";
         this.context.fillRect(0, 0, this.window.width, this.window.height);
+    }
+
+    renderGame() {
+        this.clearCanvas();
         this.renderDeadBlocks(this.game.collision_detector.getCells());
         this.renderFigure(this.game.current_figure);
     }

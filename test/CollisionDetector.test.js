@@ -43,3 +43,28 @@ test("Remove full rows and push empty ones to the front", () => {
 
     expect(detector.getCells()).toStrictEqual(cells_expected);
 });
+
+test("Reset cells to 0", () => {
+    const width = 10;
+    const height = 4;
+    const game_window = new GameWindow(30, width, height);
+
+    const cells = [
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+
+    const cells_expected = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+
+    const detector = new CollisionDetector(game_window, cells);
+    detector.resetCells();
+
+    expect(detector.getCells()).toStrictEqual(cells_expected);
+});

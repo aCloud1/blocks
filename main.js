@@ -1,7 +1,7 @@
 import {Game, GameStates} from "./Game.js"
 import Renderer from "./Renderer.js"
 import GameWindow from "./GameWindow.js"
-import {MainMenu, PauseMenu} from "./Menu.js"
+import {MainMenu, PauseMenu, GameOverMenu} from "./Menu.js"
 
 let canvas;
 let context;
@@ -10,8 +10,32 @@ let previous_time = 0.0;
 
 const game_window = new GameWindow();
 const game = new Game(game_window);
-const menu = new MainMenu(game);
+
+const menu_main = new MainMenu(game);
+const menu_game_over = new GameOverMenu(game);
+
+//const current_menu ???
+
 const renderer = new Renderer(game, game_window);
+
+function handleMenuEvents(event) {
+    //current_menu.handleInput(event);
+    switch(game.state) {
+        case GameStates.IN_MAIN_MENU:
+            menu_main.handleInput(event);
+            break;
+
+        case GameStates.IN_PAUSE_MENU:
+            break;
+
+        case GameStates.IN_GAME_OVER:
+            menu_game_over.handleInput(event);
+            break;
+
+        default:
+            break;
+    }
+}
 
 window.onload = function() {
     canvas = document.getElementById("board");
@@ -20,10 +44,11 @@ window.onload = function() {
 
     context = canvas.getContext("2d");
     renderer.setContext(context);
-    menu.setCanvas(canvas);
+    menu_main.setCanvas(canvas);
+    menu_game_over.setCanvas(canvas);
 
     document.addEventListener("keydown", event => game.handleInput(event));
-    document.addEventListener("click", event => menu.handleInput(event));
+    document.addEventListener("click", event => handleMenuEvents(event));
 }
 
 
@@ -39,7 +64,7 @@ const loop = time => {
     switch(game.state) {
         case GameStates.IN_MAIN_MENU:
             //menu.update(dt);
-            renderer.renderMenu(menu);
+            renderer.renderMenu(menu_main);
             break;
 
         case GameStates.IN_PAUSE_MENU:
@@ -53,6 +78,7 @@ const loop = time => {
 
         case GameStates.IN_GAME_OVER:
             // todo: show game over screen
+            renderer.renderMenu(menu_game_over);
             console.log("GAME_OVER");
             break;
 
