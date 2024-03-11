@@ -1,6 +1,13 @@
 import Position from "./Position.js";
 
-export default class CollisionDetector {
+
+export const BlockProperties = Object.freeze({
+    Color: 0xFFFE,
+    Collision: 0x0001,
+});
+
+
+export class CollisionDetector {
     constructor(game_window, initial_cells = undefined) {
 	this.window = game_window;
 
@@ -16,18 +23,34 @@ export default class CollisionDetector {
         }
     }
 
-    getCells() {
+    get getCells() {
         return this.cells;
+    }
+
+    getCell(grid_position) {
+        return this.cells[grid_position.x][grid_position.y];
     }
 
     setCell(grid_position, value) {
         this.cells[grid_position.y][grid_position.x] = value;
     }
 
-    setCells(blocks, value) {
+    getCellProperty(grid_position, cell_property) {
+        return this.getCell(grid_position) & cell_property;
+    }
+
+    setCellProperty(grid_position, cell_property, value) {
+        const relevant_bits = cell_property & value;
+        this.cells[grid_position.y][grid_position.x] &= ~cell_property; // set specified property bits to 0
+        this.cells[grid_position.y][grid_position.x] |= relevant_bits;
+    }
+
+    setCells(blocks) {
         for(let i = 0; i < blocks.length; i++) {
-            const pos = blocks[i].getPosition;
-            this.cells[pos.y][pos.x] = value;
+            const block = blocks[i];
+            const pos = block.getPosition;
+            this.setCellProperty(pos, BlockProperties.Color, block.getColor);
+            this.setCellProperty(pos, BlockProperties.Collision, 1);
         }
     }
 

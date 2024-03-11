@@ -1,8 +1,11 @@
 import Position from "./Position.js"
+import {BlockProperties} from "./CollisionDetector.js"
+import {CodeToColor} from "./Colors.js"
+
 
 export default class Renderer {
     constructor(game, game_window) {
-        this.game = game
+        this.game = game;
         this.window = game_window;
     }
 
@@ -10,8 +13,8 @@ export default class Renderer {
         this.context = context;
     }
 
-    renderBlock(block, fill_style = "blue") {
-        this.context.fillStyle = fill_style;
+    renderBlock(block) {
+        this.context.fillStyle = CodeToColor[block.getColor];
         this.context.fillRect(
             block.getPosition.x * this.window.block_size,
             block.getPosition.y * this.window.block_size,
@@ -29,24 +32,29 @@ export default class Renderer {
         }
     }
 
-    renderDeadBlocks(array2d, fill_style = "blue") {
-        this.context.fillStyle = fill_style;
+    // todo: rename to `renderBoard`
+    renderDeadBlocks(array2d) {
         for(let i = 0; i < array2d.length; i++) {
             for(let j = 0; j < array2d[i].length; j++) {
-                if(array2d[i][j] === 2) {
-                    this.context.fillRect(
-                        j * this.window.block_size,
-                        i * this.window.block_size,
-                        this.window.getBlockSize,
-                        this.window.getBlockSize
-                    );
+                const color_code = this.game.collision_detector.getCellProperty(new Position(i, j), BlockProperties.Color);
+
+                if(color_code === 0) {
+                    continue;
                 }
+
+                this.context.fillStyle = CodeToColor[color_code];
+                this.context.fillRect(
+                    j * this.window.block_size,
+                    i * this.window.block_size,
+                    this.window.getBlockSize,
+                    this.window.getBlockSize
+                );
             }
         }
     }
 
     renderFigure(figure) {
-        figure.getBlocks.forEach(b => this.renderBlock(b, "green"));
+        figure.getBlocks.forEach(b => this.renderBlock(b));
     }
 
     renderText(position, text, fill_style, font = "24px Arial") {
@@ -58,20 +66,20 @@ export default class Renderer {
     renderButton(button) {
         this.context.fillStyle = "blue";
         this.context.fillRect(
-            button.getPosition().x,
-            button.getPosition().y,
-            button.getDimensions().x,
-            button.getDimensions().y
+            button.getPosition.x,
+            button.getPosition.y,
+            button.getDimensions.x,
+            button.getDimensions.y
         );
 
         const offset_x = button.title.length * 4;
         const offset_y = button.font_size / 4;
         const pos_with_offset = new Position(
-            button.getPosition().x + button.getDimensions().x / 2 - offset_x,
-            button.getPosition().y + button.getDimensions().y / 2 + offset_y
+            button.getPosition.x + button.getDimensions.x / 2 - offset_x,
+            button.getPosition.y + button.getDimensions.y / 2 + offset_y
         );
 
-        this.renderText(pos_with_offset, button.title, "white", button.getFont());
+        this.renderText(pos_with_offset, button.title, "white", button.getFont);
     }
 
     renderLabel(label) {
@@ -80,10 +88,10 @@ export default class Renderer {
         }
 
         const pos_with_offset = new Position(
-            label.getPosition().x,
-            label.getPosition().y
+            label.getPosition.x,
+            label.getPosition.y
         );
-        this.renderText(pos_with_offset, label.title, label.color, label.getFont());
+        this.renderText(pos_with_offset, label.title, label.color, label.getFont);
     }
 
     renderMenu(menu) {
@@ -91,8 +99,8 @@ export default class Renderer {
             this.clearCanvas();
         }
         
-        menu.getButtons().forEach(button => this.renderButton(button));
-        menu.getLabels().forEach(label => this.renderLabel(label));
+        menu.getButtons.forEach(button => this.renderButton(button));
+        menu.getLabels.forEach(label => this.renderLabel(label));
     }
 
     clearCanvas() {
@@ -102,7 +110,7 @@ export default class Renderer {
 
     renderGame() {
         this.clearCanvas();
-        this.renderDeadBlocks(this.game.collision_detector.getCells());
+        this.renderDeadBlocks(this.game.collision_detector.getCells);
         this.renderFigure(this.game.current_figure);
     }
 }

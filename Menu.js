@@ -11,11 +11,11 @@ class Menu {
 		this.labels = [];
 	}
 
-	getButtons() {
+	get getButtons() {
 		return this.buttons;
 	}
 
-	getLabels() {
+	get getLabels() {
 		return this.labels;
 	}
 
@@ -34,7 +34,7 @@ class Menu {
 	update(dt) {}
 
 	handleInput(event) {
-		if(this.game.getState() !== this.state) {
+		if(this.game.getState !== this.state) {
 			return;
 		} 
 
@@ -44,7 +44,7 @@ class Menu {
 		);
 
 		this.buttons.forEach(b => {
-			const clicked = this.isPositionInsideRectangle(pos_clicked_in_canvas, b.getRect());
+			const clicked = this.isPositionInsideRectangle(pos_clicked_in_canvas, b.getRect);
 			if(clicked) {
 				b.activate();
 			}

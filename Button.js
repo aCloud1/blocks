@@ -15,15 +15,15 @@ export class Button {
         this.font = "Arial";
     }
 
-    getRect() {
+    get getRect() {
         return this.rect;
     }
 
-    getPosition() {
+    get getPosition() {
         return this.rect.left_top;
     }
 
-    getDimensions() {
+    get getDimensions() {
         return this.dimensions;
     }
 
@@ -56,11 +56,11 @@ export class Label {
         return this.visible;
     }
 
-    getPosition() {
+    get getPosition() {
         return this.pos;
     }
 
-    getFont() {
+    get getFont() {
         return `${this.font_size}px ${this.font}`;
     }
 

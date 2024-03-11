@@ -1,5 +1,5 @@
 import Randomizer from "./Randomizer.js"
-import CollisionDetector from "./CollisionDetector.js"
+import {CollisionDetector} from "./CollisionDetector.js"
 import Position from "./Position.js"
 
 
@@ -26,7 +26,7 @@ export class Game {
 	this.time_elapsed = 0;
     }
 
-    getState() {
+    get getState() {
 	return this.state;
     }
 
@@ -34,11 +34,11 @@ export class Game {
 	this.state = game_state;
     }
 
-    getTimeElapsed() {
+    get getTimeElapsed() {
 	return this.time_elapsed;
     }
 
-    getScore() {
+    get getScore() {
 	return this.score;
     }
 
@@ -71,7 +71,7 @@ export class Game {
     }
 
     givePointsForFigurePlacement(figure) {
-	this.score += figure.getBlocks.length * 10;
+	this.score += figure.getBlocks.length;
     }
 
     givePointsForClearingRows(number_of_rows) {
@@ -79,7 +79,6 @@ export class Game {
     }
 
     spawnNewFigure() {
-	this.collision_detector.setCells(this.current_figure.getBlocks, 2);
 	this.current_figure = this.randomizer.createRandomFigureType(new Position(this.window.width_in_blocks / 2, 1));
     }
 
@@ -95,6 +94,7 @@ export class Game {
 	}
 
 	this.givePointsForFigurePlacement(this.current_figure);
+	this.collision_detector.setCells(this.current_figure.getBlocks);
 	this.spawnNewFigure();
 
 	const full_rows = this.collision_detector.getIdsOfFullRows();
@@ -173,10 +173,10 @@ export class Game {
 
     handleMenuEvent(e) {
 	if(e.key == "Escape") {
-	    if(this.getState() === GameStates.IN_GAME) {
+	    if(this.getState === GameStates.IN_GAME) {
 		this.setState(GameStates.IN_PAUSE_MENU);
 	    }
-	    else if(this.getState() === GameStates.IN_PAUSE_MENU) {
+	    else if(this.getState === GameStates.IN_PAUSE_MENU) {
 		this.setState(GameStates.IN_GAME);
 	    }
 	}

@@ -40,7 +40,7 @@ function handleMenuEvents(event) {
 }
 
 function handleGameEvents(event) {
-    if(game.getState() === GameStates.IN_GAME) {
+    if(game.getState === GameStates.IN_GAME) {
         game.handleInput(event);
     }
     game.handleMenuEvent(event);
@@ -63,8 +63,8 @@ window.onload = function() {
 
 
 function updateGUI() {
-    counter_time.innerHTML = (game.getTimeElapsed() / 1000).toFixed(2);
-    counter_score.innerHTML = game.getScore();
+    counter_time.innerHTML = (game.getTimeElapsed / 1000).toFixed(2);
+    counter_score.innerHTML = game.getScore;
 }
 
 const loop = time => {

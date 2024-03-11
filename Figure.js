@@ -1,5 +1,6 @@
 import Block from "./Block.js";
 import Position from "./Position.js";
+import {Colors, ColorToCode} from "./Colors.js"
 
 const Directions = Object.freeze({
     NORTH: 0,
@@ -18,13 +19,15 @@ const Directions = Object.freeze({
 });
 
 class Figure {
-    constructor(grid_position, block_positions_map, direction_enum = Directions.NORTH, falling_time_elapsed = 0) {
+    constructor(grid_position, block_positions_map, color = Colors.WHITE, direction_enum = Directions.NORTH, falling_time_elapsed = 0) {
         this.pos = grid_position;
+        this.block_positions_map = block_positions_map;
+        this.color = color;
+
         this.falling_speed = 100;
         this.falling_time_elapsed = falling_time_elapsed;
         this.facing = direction_enum;
 
-        this.block_positions_map = block_positions_map;
         this.blocks = [];
         const relative_positions = this.block_positions_map.get(this.facing);
         for(let i = 0; i < relative_positions.length; i++) {
@@ -32,7 +35,7 @@ class Figure {
                 this.pos.x + relative_positions[i].x,
                 this.pos.y + relative_positions[i].y
             );
-            this.blocks.push(new Block(pos));
+            this.blocks.push(new Block(pos, ColorToCode[this.color]));
         }
     }
 
@@ -104,6 +107,10 @@ class Figure {
         }
     }
 
+    get getColor() {
+        return this.color;
+    }
+
 }
 
 export class FigureT extends Figure {
@@ -155,7 +162,7 @@ export class FigureT extends Figure {
             new Position(0, 1)
         ]);
 
-        super(grid_position, block_positions_map);
+        super(grid_position, block_positions_map, Colors.GREEN);
     }
 }
 
@@ -199,7 +206,7 @@ export class FigureS extends Figure {
             new Position(1, -1),
         ]);
 
-        super(grid_position, block_positions_map);
+        super(grid_position, block_positions_map, Colors.BLUE);
     }
 }
 
@@ -252,7 +259,7 @@ export class FigureL extends Figure {
             new Position(1, 0),
         ]);
 
-        super(grid_position, block_positions_map);
+        super(grid_position, block_positions_map, Colors.YELLOW);
     }
 }
 
@@ -306,7 +313,7 @@ export class FigureLMirrored extends Figure {
             new Position(1, 1),
         ]);
 
-        super(grid_position, block_positions_map);
+        super(grid_position, block_positions_map, Colors.ORANGE);
     }
 }
 
@@ -350,6 +357,6 @@ export class FigureI extends Figure {
             new Position(2, 0),
         ]);
 
-        super(grid_position, block_positions_map);
+        super(grid_position, block_positions_map, Colors.PINK);
     }
 }
