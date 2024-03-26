@@ -10,23 +10,23 @@ export const Colors = Object.freeze({
 });
 
 export const ColorToCode = Object.freeze({
-	"white": 1,
-	"red": 2,
-	"green": 3,
-	"blue": 4,
-	"purple": 5,
-	"yellow": 6,
-	"orange": 7,
-	"pink": 8,
+	"white": 2,
+	"red": 4,
+	"green": 6,
+	"blue": 8,
+	"purple": 10,
+	"yellow": 12,
+	"orange": 14,
+	"pink": 16,
 });
 
 export const CodeToColor = Object.freeze({
-	1: "white",
-	2: "red",
-	3: "green",
-	4: "blue",
-	5: "purple",
-	6: "yellow",
-	7: "orange",
-	8: "pink",
+	2: "white",
+	4: "red",
+	6: "green",
+	8: "blue",
+	10: "purple",
+	12: "yellow",
+	14: "orange",
+	16: "pink",
 });
