@@ -7,6 +7,7 @@ export const Colors = Object.freeze({
     YELLOW: "yellow",
     ORANGE: "orange",
     PINK: "pink",
+    BLACK: "black"
 });
 
 export const ColorToCode = Object.freeze({
@@ -18,6 +19,7 @@ export const ColorToCode = Object.freeze({
     "yellow": 12,
     "orange": 14,
     "pink": 16,
+    "black": 18
 });
 
 export const CodeToColor = Object.freeze({
@@ -29,4 +31,5 @@ export const CodeToColor = Object.freeze({
     12: "yellow",
     14: "orange",
     16: "pink",
+    18: "black"
 });

@@ -7,6 +7,8 @@ class Menu {
 	this.game = game;
 	this.state = GameStates.UNKNOWN;
 
+	this.bg_overlay = false;
+
 	this.buttons = [];
 	this.labels = [];
     }
@@ -21,6 +23,10 @@ class Menu {
 
     setCanvas(canvas) {
 	this.canvas = canvas;
+    }
+
+    renderOverlay() {
+	return this.bg_overlay;
     }
 
     isPositionInsideRectangle(pos, rect) {
@@ -72,6 +78,8 @@ export class PauseMenu extends Menu {
 	super(game);
 	this.state = GameStates.IN_MAIN_MENU;
 
+	this.bg_overlay = true;
+
 	this.labels = [
 	    new Label(new Position(100, 50), "Paused", true)
 	];
@@ -87,6 +95,8 @@ export class GameOverMenu extends Menu {
     constructor(game) {
 	super(game);
 	this.state = GameStates.IN_GAME_OVER;
+
+	this.bg_overlay = true;
 
 	this.buttons = [
 	    new Button(new Position(50, 50), new Position(200, 75), "Play again", () => { this.game.start(); }),

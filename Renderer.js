@@ -94,9 +94,19 @@ export default class Renderer {
         this.renderText(pos_with_offset, label.title, label.color, label.getFont);
     }
 
+    renderOverlay() {
+        this.context.fillStyle = "rgba(0, 0, 0, 0.55)";
+        this.context.fillRect(0, 0, this.window.width, this.window.height);
+    }
+
     renderMenu(menu) {
         if(this.game.isInMainMenu()) {
             this.clearCanvas();
+        }
+
+        if(menu.renderOverlay()) {
+            this.renderGame();
+            this.renderOverlay();
         }
         
         menu.getButtons.forEach(button => this.renderButton(button));
