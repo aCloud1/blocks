@@ -1,4 +1,4 @@
-import {GameStates} from "./Game.js"
+import {GameStates, GameModes} from "./Game.js"
 import Position from "./Position.js"
 import {Button, Label} from "./Button.js"
 
@@ -65,9 +65,26 @@ export class MainMenu extends Menu {
 	this.state = GameStates.IN_MAIN_MENU;
 
 	this.buttons = [
-	    new Button(new Position(50, 50), new Position(200, 75), "Start", () => { this.game.start(); }),
-	    new Button(new Position(50, 200), new Position(200, 75), "Options", () => {console.log("Options")}),
-	    new Button(new Position(50, 350), new Position(200, 75), "Leaderboards", () => {console.log("Leaderboards")})
+	    new Button(new Position(50, 50), new Position(200, 75), "Start", () => { this.game.setState(GameStates.GAME_MODE_SELECT); }),
+	    new Button(new Position(50, 350), new Position(200, 75), "Leaderboards", () => { console.log("Leaderboards") })
+	];
+    }
+}
+
+export class GameModeMenu extends Menu {
+    constructor(game) {
+	super(game);
+	this.state = GameStates.GAME_MODE_SELECT;
+
+	this.buttons = [
+	    new Button(new Position(50, 50), new Position(200, 75), "Classic", () => { 
+		this.game.setMode(GameModes.CLASSIC);
+		this.game.start();
+	    }),
+	    new Button(new Position(50, 200), new Position(200, 75), "Typer", () => {
+		this.game.setMode(GameModes.TYPER);
+		this.game.start();
+	    }),
 	];
     }
 }

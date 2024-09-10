@@ -8,6 +8,13 @@ export const GameStates = Object.freeze({
     IN_MAIN_MENU: 2,
     IN_PAUSE_MENU: 3,
     IN_GAME_OVER: 4,
+    GAME_MODE_SELECT: 5,
+});
+
+
+export const GameModes = Object.freeze({
+    CLASSIC: 1,
+    TYPER: 2,
 });
 
 
@@ -15,6 +22,7 @@ export class Game {
     constructor(game_window) {
 	this.debug_mode = false;
 	this.state = GameStates.IN_MAIN_MENU;
+	this.mode = null;
 
 	this.window = game_window;
 	this.randomizer = new Randomizer();
@@ -32,6 +40,10 @@ export class Game {
 
     setState(game_state) {
 	this.state = game_state;
+    }
+
+    setMode(mode) {
+	this.mode = mode;
     }
 
     get getTimeElapsed() {
@@ -63,7 +75,8 @@ export class Game {
     }
 
     isInMainMenu() {
-	return this.state === GameStates.IN_MAIN_MENU;
+	return this.state === GameStates.IN_MAIN_MENU 
+	    || this.state === GameStates.GAME_MODE_SELECT;
     }
 
     setDebugMode(boolean) {
@@ -109,8 +122,15 @@ export class Game {
 	    this.time_elapsed += dt;
 	}
 
-	// todo: check collisions only when the block moves
-	this.handleFigureCollision();
+	switch(this.mode) {
+	    case GameModes.CLASSIC:
+		// todo: check collisions only when the block moves
+		this.handleFigureCollision();
+		break;
+
+	    case GameModes.TYPER:
+		break;
+	}
     }
 
 

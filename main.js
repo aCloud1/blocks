@@ -1,7 +1,7 @@
 import {Game, GameStates} from "./Game.js"
 import Renderer from "./Renderer.js"
 import GameWindow from "./GameWindow.js"
-import {MainMenu, PauseMenu, GameOverMenu} from "./Menu.js"
+import {MainMenu, GameModeMenu, PauseMenu, GameOverMenu} from "./Menu.js"
 
 let canvas;
 let context;
@@ -12,10 +12,10 @@ const game_window = new GameWindow();
 const game = new Game(game_window);
 
 const menu_main = new MainMenu(game);
+const menu_modes = new GameModeMenu(game);
 const menu_pause = new PauseMenu(game);
 const menu_game_over = new GameOverMenu(game);
 
-//const current_menu ???
 
 const renderer = new Renderer(game, game_window);
 
@@ -24,6 +24,10 @@ function handleMenuEvents(event) {
     switch(game.state) {
         case GameStates.IN_MAIN_MENU:
             menu_main.handleInput(event);
+            break;
+
+        case GameStates.GAME_MODE_SELECT:
+            menu_modes.handleInput(event);
             break;
 
         case GameStates.IN_PAUSE_MENU:
@@ -54,6 +58,7 @@ window.onload = function() {
     context = canvas.getContext("2d");
     renderer.setContext(context);
     menu_main.setCanvas(canvas);
+    menu_modes.setCanvas(canvas);
     menu_pause.setCanvas(canvas);
     menu_game_over.setCanvas(canvas);
 
@@ -76,6 +81,10 @@ const loop = time => {
             //menu.update(dt);
             renderer.renderMenu(menu_main);
             updateGUI();
+            break;
+
+        case GameStates.GAME_MODE_SELECT:
+            renderer.renderMenu(menu_modes);
             break;
 
         case GameStates.IN_PAUSE_MENU:

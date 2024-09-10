@@ -28,6 +28,9 @@ class Figure {
         this.falling_time_elapsed = falling_time_elapsed;
         this.facing = direction_enum;
 
+        // todo: generate random word
+        this.word = "test"
+
         this.blocks = [];
         const relative_positions = this.block_positions_map.get(this.facing);
         for(let i = 0; i < relative_positions.length; i++) {
