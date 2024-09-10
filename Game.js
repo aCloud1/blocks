@@ -28,7 +28,7 @@ export class Game {
 	this.randomizer = new Randomizer();
 	this.collision_detector = new CollisionDetector(game_window);
 
-	this.current_figure = this.randomizer.createRandomFigureType(new Position(this.window.width_in_blocks / 2, 1));
+	this.current_figure = null;
 
 	this.score = 0;
 	this.time_elapsed = 0;
@@ -63,10 +63,15 @@ export class Game {
 	this.collision_detector.resetCells();
 	this.score = 0;
 	this.time_elapsed = 0;
+
+	this.word_progress = '';
+	this.health_total = 3;
+	this.health_left = this.health_total;
     }
 
     start() {
 	this.reset();
+	this.current_figure = this.randomizer.createRandomFigureType(new Position(this.window.width_in_blocks / 2, 1));
 	this.state = GameStates.IN_GAME;
     }
 
