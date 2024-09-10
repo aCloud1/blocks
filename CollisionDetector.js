@@ -72,7 +72,7 @@ export class CollisionDetector {
         return (block.pos.y + 1 >= this.window.height_in_blocks);
     }
 
-    isFigureAboveBounds(figure) {
+    isFigureAboveUpperBound(figure) {
         const blocks = figure.getBlocks;
         for(let i = 0; i < blocks.length; i++) {
             if(blocks[i].getPosition.y < 0) {
@@ -80,6 +80,17 @@ export class CollisionDetector {
             }
         }
         return false;
+    }
+
+    isFigureBelowBottomBound(figure) {
+        const blocks = figure.getBlocks;
+        // todo: if at least one block is above ground
+        for(let i = 0; i < blocks.length; i++) {
+            if(blocks[i].getPosition.y <= this.window.height_in_blocks) {
+                return false;
+            }
+        }
+        return true;
     }
 
     blockCollidesWithBounds(block) {

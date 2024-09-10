@@ -30,10 +30,13 @@ export class Game {
 
 	this.current_figure = this.randomizer.createRandomFigureType(new Position(this.window.width_in_blocks / 2, 1));
 
-	this.word_progress = '';
-
 	this.score = 0;
 	this.time_elapsed = 0;
+
+	// only used in GameModes.TYPER
+	this.word_progress = '';
+	this.health_total = 3;
+	this.health_left = this.health_total;
     }
 
     get getState() {
@@ -103,7 +106,7 @@ export class Game {
 	}
 	this.current_figure.goUp();
 
-	if(this.collision_detector.isFigureAboveBounds(this.current_figure)) {
+	if(this.collision_detector.isFigureAboveUpperBound(this.current_figure)) {
 	    this.state = GameStates.IN_GAME_OVER;
 	    return;
 	}
@@ -117,6 +120,21 @@ export class Game {
 	this.collision_detector.clearRows(full_rows);
     }
 
+    handleFigureCollisionTyper() {
+	if(this.collision_detector.isFigureBelowBottomBound(this.current_figure)) {
+	    this.health_left--;
+	    if(this.health_left > 0) {
+		this.spawnNewFigure();
+	    }
+	}
+
+	console.log(this.health_left);
+	if(this.health_left <= 0) {
+	    this.state = GameStates.IN_GAME_OVER;
+	    return;
+	}
+    }
+
 
     update(dt) {
 	if(!this.inDebugMode()) {
@@ -125,7 +143,15 @@ export class Game {
 	}
 
 	// todo: check collisions only when the block moves
-	this.handleFigureCollision();
+	switch(this.mode) {
+	    case GameModes.CLASSIC:
+		this.handleFigureCollision();
+		break;
+
+	    case GameModes.TYPER:
+		this.handleFigureCollisionTyper();
+		break;
+	}
     }
 
 
