@@ -30,6 +30,8 @@ export class Game {
 
 	this.current_figure = this.randomizer.createRandomFigureType(new Position(this.window.width_in_blocks / 2, 1));
 
+	this.word_progress = '';
+
 	this.score = 0;
 	this.time_elapsed = 0;
     }
@@ -122,19 +124,12 @@ export class Game {
 	    this.time_elapsed += dt;
 	}
 
-	switch(this.mode) {
-	    case GameModes.CLASSIC:
-		// todo: check collisions only when the block moves
-		this.handleFigureCollision();
-		break;
-
-	    case GameModes.TYPER:
-		break;
-	}
+	// todo: check collisions only when the block moves
+	this.handleFigureCollision();
     }
 
 
-    handleInput(e) {
+    handleInputModeClassic(e) {
 	if(e.code == "ArrowLeft") {
 	    this.current_figure.goLeft();
 	    if(this.collision_detector.figureCollides(this.current_figure)) {
@@ -190,6 +185,39 @@ export class Game {
 	    }
 	}
     }
+
+
+    handleInputModeTyper(e) {
+	let len = this.word_progress.length;
+	if(this.current_figure.word[len] == e.key) {
+	    this.word_progress += e.key;
+	}
+	else {
+	    this.word_progress = '';
+	}
+
+	console.log(this.word_progress);
+
+	if(this.word_progress === this.current_figure.word) {
+	    this.word_progress = '';
+	    this.givePointsForFigurePlacement(this.current_figure);
+	    this.spawnNewFigure();
+	}
+    }
+
+
+    handleInput(e) {
+	switch(this.mode) {
+	    case GameModes.CLASSIC:
+		this.handleInputModeClassic(e);
+		break;
+
+	    case GameModes.TYPER:
+		this.handleInputModeTyper(e);
+		break;
+	}
+    }
+
 
     handleMenuEvent(e) {
 	if(e.key == "Escape") {

@@ -54,6 +54,10 @@ class Figure {
         return this.blocks;
     }
 
+    get getWord() {
+        return this.word;
+    }
+
     goRight() {
         this.pos.x++;
 	this.blocks.forEach(b => b.goRight());

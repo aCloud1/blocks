@@ -1,6 +1,7 @@
 import Position from "./Position.js"
 import {BlockProperties} from "./CollisionDetector.js"
 import {CodeToColor} from "./Colors.js"
+import {GameModes} from "./Game.js"
 
 
 export default class Renderer {
@@ -24,7 +25,7 @@ export default class Renderer {
 
         if(this.game.inDebugMode()) {
             const offset = this.window.block_size / 2;
-            const pos_in_canvas = new Position(
+            const pos_in_canvas = new position(
                 block.pos.x * this.window.block_size + offset / 2,
                 block.pos.y * this.window.block_size + offset
             );
@@ -122,6 +123,16 @@ export default class Renderer {
         this.clearCanvas();
         this.renderDeadBlocks(this.game.collision_detector.getCells);
         this.renderFigure(this.game.current_figure);
+
+        if(this.game.mode === GameModes.TYPER) {
+            const offset = this.window.block_size / 2;
+            const pos_in_canvas = new Position(
+                this.game.current_figure.getPosition.x * this.window.block_size + offset / 2,
+                this.game.current_figure.getPosition.y * this.window.block_size + offset
+            );
+            // this.renderText(pos_in_canvas, this.game.current_figure.getWord, "black", "bold 16px Arial");
+            this.renderText(pos_in_canvas, this.game.current_figure.getWord, "white", "16px Arial");
+        }
     }
 }
 
