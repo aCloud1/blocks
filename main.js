@@ -2,11 +2,13 @@ import {Game, GameStates} from "./Game.js"
 import Renderer from "./Renderer.js"
 import GameWindow from "./GameWindow.js"
 import {MainMenu, GameModeMenu, PauseMenu, GameOverMenu} from "./Menu.js"
+import {Constants} from "./Constants.js"
 
 let canvas;
 let context;
 
 let previous_time = 0.0;
+let counter_health = [];
 
 const game_window = new GameWindow();
 const game = new Game(game_window);
@@ -55,6 +57,10 @@ window.onload = function() {
     counter_time = document.getElementById("counter_time");
     counter_score = document.getElementById("counter_score");
 
+    counter_health.push(document.getElementById("health-1"));
+    counter_health.push(document.getElementById("health-2"));
+    counter_health.push(document.getElementById("health-3"));
+
     context = canvas.getContext("2d");
     renderer.setContext(context);
     menu_main.setCanvas(canvas);
@@ -67,9 +73,24 @@ window.onload = function() {
 }
 
 
+function updateHealth() {
+    for(let i = 0; i < game.health_left; i++) {
+        counter_health[i].className = Constants.CSS_CLASS_FULL_HEART;
+    }
+
+    let health_depleted = game.health_total - game.health_left;
+    let current = game.health_total - 1;
+    for(let i = health_depleted; i > 0; i--) {
+        counter_health[current].className = Constants.CSS_CLASS_EMPTY_HEART;
+        current--;
+    }
+}
+
 function updateGUI() {
     counter_time.innerHTML = (game.getTimeElapsed / 1000).toFixed(2);
     counter_score.innerHTML = game.getScore;
+
+    updateHealth();
 }
 
 const loop = time => {
