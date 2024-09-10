@@ -5,9 +5,9 @@ import Position from "./Position.js"
 
 export const GameStates = Object.freeze({
     IN_GAME: 1,
-    IN_MAIN_MENU: 2,
-    IN_PAUSE_MENU: 3,
-    IN_GAME_OVER: 4,
+    MAIN_MENU: 2,
+    PAUSED: 3,
+    GAME_OVER: 4,
     GAME_MODE_SELECT: 5,
 });
 
@@ -21,7 +21,7 @@ export const GameModes = Object.freeze({
 export class Game {
     constructor(game_window) {
 	this.debug_mode = false;
-	this.state = GameStates.IN_MAIN_MENU;
+	this.state = GameStates.MAIN_MENU;
 	this.mode = null;
 
 	this.window = game_window;
@@ -72,7 +72,7 @@ export class Game {
 
     stop() {
 	this.reset();
-	this.state = GameStates.IN_MAIN_MENU;
+	this.state = GameStates.MAIN_MENU;
     }
 
     inDebugMode() {
@@ -80,7 +80,7 @@ export class Game {
     }
 
     isInMainMenu() {
-	return this.state === GameStates.IN_MAIN_MENU 
+	return this.state === GameStates.MAIN_MENU 
 	    || this.state === GameStates.GAME_MODE_SELECT;
     }
 
@@ -107,7 +107,7 @@ export class Game {
 	this.current_figure.goUp();
 
 	if(this.collision_detector.isFigureAboveUpperBound(this.current_figure)) {
-	    this.state = GameStates.IN_GAME_OVER;
+	    this.state = GameStates.GAME_OVER;
 	    return;
 	}
 
@@ -130,7 +130,7 @@ export class Game {
 
 	console.log(this.health_left);
 	if(this.health_left <= 0) {
-	    this.state = GameStates.IN_GAME_OVER;
+	    this.state = GameStates.GAME_OVER;
 	    return;
 	}
     }
@@ -248,9 +248,9 @@ export class Game {
     handleMenuEvent(e) {
 	if(e.key == "Escape") {
 	    if(this.getState === GameStates.IN_GAME) {
-		this.setState(GameStates.IN_PAUSE_MENU);
+		this.setState(GameStates.PAUSED);
 	    }
-	    else if(this.getState === GameStates.IN_PAUSE_MENU) {
+	    else if(this.getState === GameStates.PAUSED) {
 		this.setState(GameStates.IN_GAME);
 	    }
 	}

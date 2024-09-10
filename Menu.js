@@ -62,7 +62,7 @@ class Menu {
 export class MainMenu extends Menu {
     constructor(game) {
 	super(game);
-	this.state = GameStates.IN_MAIN_MENU;
+	this.state = GameStates.MAIN_MENU;
 
 	this.buttons = [
 	    new Button(new Position(50, 50), new Position(200, 75), "Start", () => { this.game.setState(GameStates.GAME_MODE_SELECT); }),
@@ -93,7 +93,7 @@ export class GameModeMenu extends Menu {
 export class PauseMenu extends Menu {
     constructor(game) {
 	super(game);
-	this.state = GameStates.IN_MAIN_MENU;
+	this.state = GameStates.MAIN_MENU;
 
 	this.bg_overlay = true;
 
@@ -111,7 +111,7 @@ export class PauseMenu extends Menu {
 export class GameOverMenu extends Menu {
     constructor(game) {
 	super(game);
-	this.state = GameStates.IN_GAME_OVER;
+	this.state = GameStates.GAME_OVER;
 
 	this.bg_overlay = true;
 

@@ -22,7 +22,7 @@ const renderer = new Renderer(game, game_window);
 function handleMenuEvents(event) {
     //current_menu.handleInput(event);
     switch(game.state) {
-        case GameStates.IN_MAIN_MENU:
+        case GameStates.MAIN_MENU:
             menu_main.handleInput(event);
             break;
 
@@ -30,11 +30,11 @@ function handleMenuEvents(event) {
             menu_modes.handleInput(event);
             break;
 
-        case GameStates.IN_PAUSE_MENU:
+        case GameStates.PAUSED:
             menu_pause.handleInput(event);
             break;
 
-        case GameStates.IN_GAME_OVER:
+        case GameStates.GAME_OVER:
             menu_game_over.handleInput(event);
             break;
 
@@ -77,7 +77,7 @@ const loop = time => {
     previous_time = time;
 
     switch(game.state) {
-        case GameStates.IN_MAIN_MENU:
+        case GameStates.MAIN_MENU:
             //menu.update(dt);
             renderer.renderMenu(menu_main);
             updateGUI();
@@ -87,7 +87,7 @@ const loop = time => {
             renderer.renderMenu(menu_modes);
             break;
 
-        case GameStates.IN_PAUSE_MENU:
+        case GameStates.PAUSED:
             menu_pause.update(dt);
             renderer.renderGame();
             renderer.renderMenu(menu_pause);
@@ -99,7 +99,7 @@ const loop = time => {
             updateGUI();
             break;
 
-        case GameStates.IN_GAME_OVER:
+        case GameStates.GAME_OVER:
             renderer.renderMenu(menu_game_over);
             break;
 
