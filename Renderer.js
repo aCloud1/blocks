@@ -1,8 +1,7 @@
 import Position from "./Position.js"
 import {BlockProperties} from "./CollisionDetector.js"
-import {CodeToColor} from "./Colors.js"
+import {Color, CodeToColor} from "./Colors.js"
 import {GameModes} from "./Game.js"
-
 
 export default class Renderer {
     constructor(game, game_window) {
@@ -16,7 +15,6 @@ export default class Renderer {
 
     renderBlockTrail(block) {
         // todo: render shadows for the top blocks only
-
         const trail_length = 3;
         const alpha = [0.3, 0.2, 0.1];
         for(let offset = 1; offset <= trail_length; offset++) {
@@ -24,7 +22,12 @@ export default class Renderer {
                 continue;
             }
 
-            this.context.fillStyle = `rgba(0, 255, 0, ${alpha[offset-1]})`;
+            // get current fillStyle and set its alpha
+            this.context.fillStyle = CodeToColor[block.getColor];
+            let c = Color.fromHexString(this.context.fillStyle);
+            c.setAlpha(alpha[offset - 1]);
+            this.context.fillStyle = c.toRGBAString();
+
             this.context.fillRect(
                 block.getPosition.x * this.window.block_size,
                 (block.getPosition.y - offset) * this.window.block_size,
@@ -75,7 +78,9 @@ export default class Renderer {
     }
 
     renderFigure(figure) {
-        figure.getBlocks.forEach(b => this.renderBlockTrail(b));
+        if(this.game.mode != null && this.game.mode == GameModes.TYPER) {
+            figure.getBlocks.forEach(b => this.renderBlockTrail(b));
+        }
         figure.getBlocks.forEach(b => this.renderBlock(b));
     }
 
