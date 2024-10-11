@@ -14,6 +14,26 @@ export default class Renderer {
         this.context = context;
     }
 
+    renderBlockTrail(block) {
+        // todo: render shadows for the top blocks only
+
+        const trail_length = 3;
+        const alpha = [0.3, 0.2, 0.1];
+        for(let offset = 1; offset <= trail_length; offset++) {
+            if(block.getPosition.y - offset < 0) {
+                continue;
+            }
+
+            this.context.fillStyle = `rgba(0, 255, 0, ${alpha[offset-1]})`;
+            this.context.fillRect(
+                block.getPosition.x * this.window.block_size,
+                (block.getPosition.y - offset) * this.window.block_size,
+                this.window.getBlockSize,
+                this.window.getBlockSize
+            );
+        }
+    }
+
     renderBlock(block) {
         this.context.fillStyle = CodeToColor[block.getColor];
         this.context.fillRect(
@@ -25,7 +45,7 @@ export default class Renderer {
 
         if(this.game.inDebugMode()) {
             const offset = this.window.block_size / 2;
-            const pos_in_canvas = new position(
+            const pos_in_canvas = new Position(
                 block.pos.x * this.window.block_size + offset / 2,
                 block.pos.y * this.window.block_size + offset
             );
@@ -55,6 +75,7 @@ export default class Renderer {
     }
 
     renderFigure(figure) {
+        figure.getBlocks.forEach(b => this.renderBlockTrail(b));
         figure.getBlocks.forEach(b => this.renderBlock(b));
     }
 
